@@ -1,8 +1,8 @@
 
 -- Agriculture (Treefarm lite)
 
-require("prototypes.entity.agriculture_entity")
-require("prototypes.recipe.agriculture_recipe")
-require("prototypes.item.agriculture_item")
-require("prototypes.technology.agriculture_technology")
+require("prototypes.agriculture.agriculture_entity")
+require("prototypes.agriculture.agriculture_recipe")
+require("prototypes.agriculture.agriculture_item")
+require("prototypes.agriculture.agriculture_technology")
 require("prototypes.groupe.item-group-agriculture")
