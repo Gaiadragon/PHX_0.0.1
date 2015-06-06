@@ -41,4 +41,16 @@ data:extend
     stack_size = 500
   },
   
+  {
+    type = "item",
+    name = "tf-germling",
+    icon = "__PHX__/graphics/icons/germling.png",
+    flags = {"goes-to-main-inventory"},
+    subgroup = "tf-seeds",
+    order = "a[germling]",
+    place_result = "tf-germling",
+    fuel_value = "1MJ",
+    stack_size = 50
+  },
+  
  })

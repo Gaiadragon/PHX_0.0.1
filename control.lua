@@ -314,7 +314,35 @@ end
 
 
 function defineStandardSeedPrototypes()
-  
+  glob.tf.seedPrototypes.basicTree =
+  {
+    states =
+    {
+      "tf-germling",
+      "tf-very-small-tree",
+      "tf-small-tree",
+      "tf-medium-tree",
+      "tf-mature-tree"
+    },
+    output = {"raw-wood", 5},
+    efficiency = 
+    {
+      ["grass"] = 1.00,
+      ["grass-medium"] = 1.00,
+      ["grass-dry"] = 0.90,
+      ["dirt"] = 0.75,
+      ["dirt-dark"] = 0.75,
+      ["hills"] = 0.50,
+      ["sand"] = 0.30,
+      ["sand-dark"] = 0.30,
+
+      ["other"] = 0.01
+    },
+    basicGrowingTime = 18000,
+    randomGrowingTime = 9000,
+    fertilizerBoost = 1.00
+  }
+
   glob.tf.seedPrototypes.basicCoral =
   {
     states =
@@ -338,8 +366,8 @@ function defineStandardSeedPrototypes()
 
       ["other"] = 0.01
     },
-    basicGrowingTime = 2000,
-    randomGrowingTime = 2000,
+    basicGrowingTime = 1000,
+    randomGrowingTime = 1000,
     fertilizerBoost = 2.00
   }
 end
@@ -428,7 +456,35 @@ function fieldMaintainer(tick)
     local placed = false
     local lastPos = fieldObj.lastSeedPos
 
-  
+    for dx = lastPos.x, 8 do
+      for dy = 0, 6 do
+        if (game.canplaceentity{name = "tf-germling", position = {fieldPos.x + dx - 0.5, fieldPos.y + dy - 0.5}}) then
+          seedPos = {x = fieldPos.x + dx - 0.5, y = fieldPos.y + dy - 0.5}
+          placed = true
+          fieldObj.lastSeedPos = {x = dx, y = dy}
+          break
+        end
+      end
+      if placed == true then
+        break
+      end
+    end
+
+    if (placed == false) and (lastPos.x ~= 2) then
+      for dx = 2, lastPos.x - 1 do
+        for dy = 0, 6 do
+          if (game.canplaceentity{name = "tf-germling", position = {fieldPos.x + dx - 0.5, fieldPos.y + dy - 0.5}}) then
+            seedPos = {x = fieldPos.x + dx - 0.5, y = fieldPos.y + dy - 0.5}
+            placed = true
+            fieldObj.lastSeedPos = {x = dx, y = dy}
+            break
+          end
+        end
+        if placed == true then
+          break
+        end
+      end
+    end
 
     if seedPos ~= false then
 
@@ -515,8 +571,57 @@ function fieldmk2Maintainer(tick)
     elseif lastPos.y > fieldObj.areaRadius then
       lastPos.y = fieldObj.areaRadius
     end
-
-    
+    for dx = lastPos.x, fieldObj.areaRadius do
+      for dy = -fieldObj.areaRadius, fieldObj.areaRadius do
+        if (game.canplaceentity{name = "tf-germling", position = {fieldPos.x + dx - 0.5, fieldPos.y + dy - 0.5}}) then
+          seedPos = {x = fieldPos.x + dx - 0.5, y = fieldPos.y + dy - 0.5}
+          placed = true
+          fieldObj.lastSeedPos = {x = dx, y = dy}
+          break
+        end
+      end
+      if placed == true then
+        break
+      end
+    end
+    if (placed == false) and (lastPos.x ~= -fieldObj.areaRadius) then
+      for dx = -fieldObj.areaRadius, lastPos.x - 1 do
+        for dy = -fieldObj.areaRadius, fieldObj.areaRadius do
+          if (game.canplaceentity{name = "tf-germling", position = {fieldPos.x + dx - 0.5, fieldPos.y + dy - 0.5}}) then
+            seedPos = {x = fieldPos.x + dx - 0.5, y = fieldPos.y + dy - 0.5}
+            placed = true
+            fieldObj.lastSeedPos = {x = dx, y = dy}
+            break
+          end
+        end
+        if placed == true then
+          break
+        end
+      end
+    end
+    if seedPos ~= false then
+      local seedTypeName = seedTypeLookUpTable[seedInInv.name]
+      local newEntity = game.createentity{name = seedInInv.name, position = seedPos}
+      local newFertilized = false
+      if (fieldObj.fertAmount < 0.1) and (game.itemprototypes["tf-fertilizer"] ~= nil) and (fieldObj.entity.getinventory(1).getitemcount("tf-fertilizer") > 0) then
+        fieldObj.fertAmount = 1
+        fieldObj.entity.getinventory(1).remove{name = "tf-fertilizer", count = 1}
+      end
+      if fieldObj.fertAmount >= 0.1 then
+        fieldObj.fertAmount = fieldObj.fertAmount - 0.1
+        newFertilized = true
+      end
+      local newEfficiency = calcEfficiency(newEntity, newFertilized)
+      local entInfo =
+      {
+        entity = newEntity,
+        state = 1,
+        efficiency = newEfficiency,
+        nextUpdate = tick + math.ceil((math.random() * glob.tf.seedPrototypes[seedTypeName].randomGrowingTime + glob.tf.seedPrototypes[seedTypeName].basicGrowingTime) / newEfficiency)
+      }
+      fieldObj.entity.getinventory(1).remove{name = seedInInv.name, count = 1}
+      placeSeedIntoList(entInfo)
+    end
   end
   -- HARVESTING --
   -- is done in tree-growing function --

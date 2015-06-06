@@ -1,6 +1,6 @@
 module(..., package.seeall)
 
-remote.addinterface("PHX_interface",
+remote.addinterface("treefarm_interface",
 {
   addSeed = function(seedInfo)
     if glob.tf == nil then
@@ -139,6 +139,7 @@ function giveStuff(index)
   player.insert{name="basic-splitter", count=20}
   player.insert{name="tf-field", count=10}
   player.insert{name="raw-wood", count=100}
+  player.insert{name="tf-germling", count=100}
   player.insert{name="tf-coral-seed", count=100}
   player.insert{name="tf-fieldmk2", count=8}
   player.insert{name="logistic-robot", count=32}

@@ -34,7 +34,13 @@ data:extend
     result_count = 1
   },
   
-  
+   {
+    type = "recipe",
+    name = "tf-germling",
+    ingredients = {{"raw-wood",1}},
+    result = "tf-germling",
+    result_count = 1
+  },
   
   
 })
