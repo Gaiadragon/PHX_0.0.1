@@ -37,7 +37,7 @@ game.oninit(function()
 
   if glob.tf == nil then
     glob.tf = {}
-	glob.RWbridgeTileRestoreList = {}
+	
     glob.tf.fieldList = {}
     glob.tf.seedPrototypes = {}
       defineStandardSeedPrototypes()
@@ -52,6 +52,7 @@ game.oninit(function()
       end
     end
   end
+    glob.RWbridgeTileRestoreList = {}
 end)
 
 
@@ -63,7 +64,6 @@ game.onevent(defines.events.onplayercreated, function(event)
     glob.tf.playersData[event.playerindex].overlayStack = {}
   end
 end)
-
 
 
 game.onload(function()
@@ -152,7 +152,6 @@ game.onevent(defines.events.onputitem, function(event)
 end)
 
 
-
 game.onevent(defines.events.onbuiltentity, function(event)
   local player = game.players[event.playerindex]
   if event.createdentity.type == "tree" then
@@ -208,6 +207,8 @@ game.onevent(defines.events.onbuiltentity, function(event)
     event.createdentity.destroy()
     return
   end
+	RWtryPlaceSurface(event.createdentity, event.playerindex)
+	RWtryPlaceBridge(event.createdentity, event.playerindex)
 end)
 
 
@@ -266,6 +267,8 @@ game.onevent(defines.events.onrobotbuiltentity, function(event)
     event.createdentity.destroy()
     return
   end
+	RWtryPlaceSurface(event.createdentity, nil)
+	RWtryPlaceBridge(event.createdentity, nil)
 end)
 
 
@@ -282,8 +285,13 @@ game.onevent(defines.events.ontick, function(event)
     else
       table.remove(glob.tf.fieldList, 1)
     end
-  end
-
+	RWsurfacePlaceTick()
+	RWcarSpeedModifiersTick()
+	RWtransitionQueueTick()
+   end
+end)
+    
+  
   while ((glob.tf.growing[1] ~= nil) and (event.tick >= glob.tf.growing[1].nextUpdate)) do
     local removedEntity = table.remove(glob.tf.growing, 1)
     local seedTypeName
@@ -308,10 +316,21 @@ game.onevent(defines.events.ontick, function(event)
         removedEntity.entity.orderdeconstruction(game.forces.player)
       end
     end
-  end
+end
+
+
+game.onevent(defines.events.onpreplayermineditem, function(event)
+	
+	RWtryDestroyBridge(event.entity)
+	
 end)
 
 
+
+game.onevent(defines.events.onrobotpremined, function(event)
+	
+	RWtryDestroyBridge(event.entity)
+end)
 
 
 function canPlaceField(field)
@@ -756,34 +775,10 @@ end
 
 	--Transport
 	
-game.onevent(defines.events.ontick, function(event)
 
-	RWsurfacePlaceTick()
-	RWcarSpeedModifiersTick()
-	RWtransitionQueueTick()
-end)
 
-game.onevent(defines.events.onbuiltentity, function(event)
-	
-	RWtryPlaceSurface(event.createdentity, event.playerindex)
-	RWtryPlaceBridge(event.createdentity, event.playerindex)
-end)
 
-game.onevent(defines.events.onrobotbuiltentity, function(event)
-	
-	RWtryPlaceSurface(event.createdentity, nil)
-	RWtryPlaceBridge(event.createdentity, nil)
-end)
 
-game.onevent(defines.events.onpreplayermineditem, function(event)
-	
-	RWtryDestroyBridge(event.entity)
-end)
-
-game.onevent(defines.events.onrobotpremined, function(event)
-	
-	RWtryDestroyBridge(event.entity)
-end)
 
 -- Initialize the needed persistent variables
 --[[game.oninit(function()
