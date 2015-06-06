@@ -1,7 +1,24 @@
+--require 
+
+	-- agriculture
+
 require "defines"
 require "interfaces"
 
+	-- transport
 
+require "rwDefinitions"
+
+require "debug.debugControlFunctions"
+
+require "script.helpFunctions"
+require "script.surfacePlacing"
+require "script.bridgePlacing"
+require "script.carSpeedModifiers"
+
+-- fonctions
+
+	-- agriculture
 
 
 local seedTypeLookUpTable = {}
@@ -13,12 +30,14 @@ function populateSeedTypeLookUpTable()
   end
 end
 
-
+		-- game on init global
 
 game.oninit(function()
 
+
   if glob.tf == nil then
     glob.tf = {}
+	glob.RWbridgeTileRestoreList = {}
     glob.tf.fieldList = {}
     glob.tf.seedPrototypes = {}
       defineStandardSeedPrototypes()
@@ -734,3 +753,69 @@ function mk2MarkDeconstruction(field)
     end
   end
 end
+
+	--Transport
+	
+game.onevent(defines.events.ontick, function(event)
+
+	RWsurfacePlaceTick()
+	RWcarSpeedModifiersTick()
+	RWtransitionQueueTick()
+end)
+
+game.onevent(defines.events.onbuiltentity, function(event)
+	
+	RWtryPlaceSurface(event.createdentity, event.playerindex)
+	RWtryPlaceBridge(event.createdentity, event.playerindex)
+end)
+
+game.onevent(defines.events.onrobotbuiltentity, function(event)
+	
+	RWtryPlaceSurface(event.createdentity, nil)
+	RWtryPlaceBridge(event.createdentity, nil)
+end)
+
+game.onevent(defines.events.onpreplayermineditem, function(event)
+	
+	RWtryDestroyBridge(event.entity)
+end)
+
+game.onevent(defines.events.onrobotpremined, function(event)
+	
+	RWtryDestroyBridge(event.entity)
+end)
+
+-- Initialize the needed persistent variables
+--[[game.oninit(function()
+	glob.RWbridgeTileRestoreList = {}
+	
+	-- Custom migration function for saves created without RoadWorks
+	if game.tick > 180 then
+		game.player.print("RoadWorks: Generating limestone")
+		game.regenerateentity("RW-limestone")
+	end
+end)]]
+
+--[[game.onevent(defines.events.ontick, function(event)
+
+	RWsurfacePlaceOntick()
+	RWcarSpeedControlOntick()
+	RWcarInstrumentsOntick()
+	RWcharacterSpeedControlOntick()
+end)]]
+
+--[[game.onevent(defines.events.onbuiltentity, function(event)
+	
+	RWplaceSurface(event.createdentity)
+	RWplaceBridge(event.createdentity)
+end)]]
+
+--[[game.onevent(defines.events.onentitydied, function(event)
+	
+	RWdestroyBridge(event.entity)
+end)]]
+
+--[[game.onevent(defines.events.onpreplayermineditem, function(event)
+	
+	RWdestroyBridge(event.entity)
+end)]]
