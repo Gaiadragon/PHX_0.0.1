@@ -6,7 +6,7 @@ data:extend
 {
     type = "technology",
     name = "tf-advanced-treefarming",
-    icon = "__PHX__/graphics/icons/fieldmk2.png",
+    icon = "__PHX__/graphics/agriculture/icons/fieldmk2.png",
     effects =
     {
       {

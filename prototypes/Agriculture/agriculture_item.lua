@@ -7,7 +7,7 @@ data:extend
   {
     type = "item",
     name = "tf-field",
-    icon = "__PHX__/graphics/icons/field.png",
+    icon = "__PHX__/graphics/agriculture/icons/field.png",
     flags = {"goes-to-quickbar"},
     subgroup = "tf-buildings",
     order = "a[field]",
@@ -19,7 +19,7 @@ data:extend
   {
     type = "item",
     name = "tf-fieldmk2",
-    icon = "__PHX__/graphics/icons/fieldmk2.png",
+    icon = "__PHX__/graphics/agriculture/icons/fieldmk2.png",
     flags = {"goes-to-quickbar"},
     subgroup = "tf-buildings",
     order = "b[fieldmk2]",
@@ -32,7 +32,7 @@ data:extend
    {
     type = "item",
     name = "tf-coral-seed",
-    icon = "__PHX__/graphics/icons/coral-seed.png",
+    icon = "__PHX__/graphics/agriculture/icons/coral-seed.png",
     flags = {"goes-to-main-inventory"},
     subgroup = "tf-seeds",
     order = "b[coral]",
@@ -44,7 +44,7 @@ data:extend
   {
     type = "item",
     name = "tf-germling",
-    icon = "__PHX__/graphics/icons/germling.png",
+    icon = "__PHX__/graphics/agriculture/icons/germling.png",
     flags = {"goes-to-main-inventory"},
     subgroup = "tf-seeds",
     order = "a[germling]",

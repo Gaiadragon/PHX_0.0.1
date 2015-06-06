@@ -7,7 +7,7 @@ data:extend
     name = "treefarm",
     order = "e",
     inventory_order = "e",
-    icon = "__PHX__/graphics/icons/treefarm.png"
+    icon = "__PHX__/graphics/agriculture/icons/treefarm.png"
   },
 
     {
