@@ -1,0 +1,10 @@
+{
+  "name": "PHX",
+  "version": "0.0.1",
+  "title": "PHX",
+  "author": "Tanio & Gaia",
+  "dependencies": ["base >= 0.11.22"],
+  "description": "Multimod.
+
+Published under the CC BY-NC-ND 4.0 License"
+}
