@@ -1,3 +1,5 @@
+-- fonctionne 07 juin 2015
+
 require "defines"
 require "script.helpFunctions"
 

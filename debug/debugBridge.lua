@@ -1,3 +1,4 @@
+-- fonctionne 07 juin 2015
 -- Change this to true to see the underlying special tiles under bridges
 local bridgeXRay = true
 
