@@ -271,8 +271,6 @@ game.onevent(defines.events.onrobotbuiltentity, function(event)
 	RWtryPlaceBridge(event.createdentity, nil)
 end)
 
-
-
 game.onevent(defines.events.ontick, function(event)
   while ((glob.tf.fieldList[1] ~= nil) and (event.tick >= glob.tf.fieldList[1].nextUpdate)) do
     local fieldEnt = glob.tf.fieldList[1].entity
@@ -285,13 +283,8 @@ game.onevent(defines.events.ontick, function(event)
     else
       table.remove(glob.tf.fieldList, 1)
     end
-	RWsurfacePlaceTick()
-	RWcarSpeedModifiersTick()
-	RWtransitionQueueTick()
-   end
-end)
-    
-  
+  end
+
   while ((glob.tf.growing[1] ~= nil) and (event.tick >= glob.tf.growing[1].nextUpdate)) do
     local removedEntity = table.remove(glob.tf.growing, 1)
     local seedTypeName
@@ -316,7 +309,14 @@ end)
         removedEntity.entity.orderdeconstruction(game.forces.player)
       end
     end
-end
+  end
+  
+	RWsurfacePlaceTick()
+	RWcarSpeedModifiersTick()
+	RWtransitionQueueTick()
+
+end)
+
 
 
 game.onevent(defines.events.onpreplayermineditem, function(event)
